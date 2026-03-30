@@ -1,4 +1,4 @@
-# 🌲 QA Cypress BDD Portfolio — Cypress + Cucumber
+# 🌲 QA Cypress BDD — Cypress + Cucumber
 
 [![Cypress Tests](https://github.com/davfworks/qa-cypress-bdd-portfolio/actions/workflows/cypress.yml/badge.svg)](https://github.com/davfworks/qa-cypress-bdd-portfolio/actions/workflows/cypress.yml)
 [![Cypress](https://img.shields.io/badge/Cypress-13.x-04C38E?logo=cypress&logoColor=white)](https://cypress.io/)
