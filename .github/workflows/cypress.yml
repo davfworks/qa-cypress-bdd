@@ -1,0 +1,107 @@
+name: 🌲 Cypress BDD Tests — OrangeHRM
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Regresión completa todos los días a las 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Suite a ejecutar'
+        required: false
+        default: 'regression'
+        type: choice
+        options:
+          - regression
+          - smoke
+          - critical
+          - high
+          - low
+
+jobs:
+  # ── Tests críticos — feedback inmediato ───────────────────
+  criticos:
+    name: 🔴 Tests Críticos
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar tests críticos
+        run: npm run test:critical
+        env:
+          CYPRESS_ADMIN_USER: ${{ secrets.CYPRESS_ADMIN_USER || 'Admin' }}
+          CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD || 'admin123' }}
+
+      - name: Subir screenshots de fallos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots-criticos
+          path: cypress/reports/screenshots/
+          retention-days: 7
+
+      - name: Subir videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: videos-criticos
+          path: cypress/reports/videos/
+          retention-days: 7
+
+  # ── Regresión completa ────────────────────────────────────
+  regression:
+    name: 🧪 Regresión Completa
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: criticos
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar regresión completa
+        run: npm run test:regression
+        env:
+          CYPRESS_ADMIN_USER: ${{ secrets.CYPRESS_ADMIN_USER || 'Admin' }}
+          CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD || 'admin123' }}
+
+      - name: Subir screenshots de fallos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots-regression
+          path: cypress/reports/screenshots/
+          retention-days: 14
+
+      - name: Subir videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: videos-regression
+          path: cypress/reports/videos/
+          retention-days: 14

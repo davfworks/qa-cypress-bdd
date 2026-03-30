@@ -1,0 +1,21 @@
+{
+  "name": "qa-cypress-bdd-portfolio",
+  "version": "1.0.0",
+  "description": "Framework BDD con Cypress + Cucumber sobre OrangeHRM — UI E2E testing",
+  "scripts": {
+    "test": "cypress run",
+    "test:headed": "cypress run --headed",
+    "test:open": "cypress open",
+    "test:critical": "cypress run --env tags=@critical",
+    "test:high": "cypress run --env tags=@high",
+    "test:low": "cypress run --env tags=@low",
+    "test:smoke": "cypress run --env tags=@smoke",
+    "test:regression": "cypress run --env tags=@regression"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.0",
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "esbuild": "^0.20.0"
+  }
+}
