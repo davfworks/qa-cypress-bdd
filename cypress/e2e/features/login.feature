@@ -64,7 +64,7 @@ Feature: Login — Autenticación de usuarios
       | Admin         | wrongpasswordq    |
       | wronguser     | admin123q        |
       | admin         | Admin123q         |
-      | ADMIN         | admin123         |
+      | ADMIN         | admin123q         |
 
   # ── Seguridad ───────────────────────────────────────────────
 

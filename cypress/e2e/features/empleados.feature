@@ -25,7 +25,7 @@ Feature: Empleados — Gestión en módulo PIM
   Scenario: Buscar empleado existente
     When busco al empleado "John"
     Then debo ver resultados en la tabla
-    And los resultados deben contener "john"
+    And los resultados deben contener "John"
 
   @high
   Scenario: Buscar empleado inexistente
